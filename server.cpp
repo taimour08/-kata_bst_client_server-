@@ -16,8 +16,24 @@ public:
 };
 
 
+class BSTServer {
+public:
+    void run(int port) {
+        int serverSocket = createServerSocket(port);
+        std::cout << "Server started. Listening on port " << port << "." << std::endl;
 
+        while (true) {
+            int clientSocket = acceptClientConnection(serverSocket);
+            std::cout << "Client connected. Client socket: " << clientSocket << std::endl;
 
+            handleClientRequests(clientSocket);
+
+            close(clientSocket);
+            std::cout << "Client disconnected. Client socket: " << clientSocket << std::endl;
+        }
+    }
+
+}
 
 int main() {
     // Create socket
