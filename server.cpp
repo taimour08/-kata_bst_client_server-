@@ -123,6 +123,22 @@ private:
         }
     }
 
+
+    bool insertNode(BSTNode*& node, int key) {
+        if (node == nullptr) {
+            node = new BSTNode(key); // Create new node for the key
+            return true; // Success, key inserted
+        }
+
+        if (key < node->key) {
+            return insertNode(node->left, key); // Recursively insert in the left subtree
+        } else if (key > node->key) {
+            return insertNode(node->right, key); // Recursively insert in the right subtree
+        } else {
+            return false; // Key already exists in the BST
+        }
+    }
+
 }
 
 int main() {
