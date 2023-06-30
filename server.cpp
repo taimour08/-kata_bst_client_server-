@@ -1,7 +1,23 @@
 #include <iostream>
+#include <sstream>
+#include <stdexcept>
+#include <string>
 #include <sys/socket.h>
-#include <netinet/in.h>
+#include <arpa/inet.h>
 #include <unistd.h>
+
+class BSTNode {
+public:
+    int key;
+    BSTNode* left;
+    BSTNode* right;
+
+    BSTNode(int key) : key(key), left(nullptr), right(nullptr) {}
+};
+
+
+
+
 
 int main() {
     // Create socket
