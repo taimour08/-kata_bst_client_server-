@@ -33,6 +33,31 @@ public:
         }
     }
 
+private:
+    BSTNode* root; // Binary search tree root
+
+    int createServerSocket(int port) {
+        int serverSocket = socket(AF_INET, SOCK_STREAM, 0); // Create server socket
+        if (serverSocket == -1) {
+            throw std::runtime_error("Failed to create server socket.");
+        }
+
+        sockaddr_in serverAddress{};
+        serverAddress.sin_family = AF_INET;
+        serverAddress.sin_addr.s_addr = INADDR_ANY;
+        serverAddress.sin_port = htons(port);
+
+        if (bind(serverSocket, reinterpret_cast<sockaddr*>(&serverAddress), sizeof(serverAddress)) < 0) {
+            throw std::runtime_error("Failed to bind server socket to port.");
+        }
+
+        if (listen(serverSocket, 3) < 0) {
+            throw std::runtime_error("Failed to listen on server socket.");
+        }
+
+        return serverSocket;
+    }
+
 }
 
 int main() {
