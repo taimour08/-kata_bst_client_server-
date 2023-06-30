@@ -11,3 +11,14 @@ EXPECT_EQ(serverResponse, ""); // Test the server's response
 EXPECT_EQ("delete 5", ""); // Test the command sent by the client
 EXPECT_EQ(serverResponse, ""); // Test the server's response
 
+// Client command: find 5
+// Server response: found
+EXPECT_EQ("find 5", ""); // Test the command sent by the client
+EXPECT_EQ(serverResponse, "found"); // Test the server's response
+
+// Client command: find 7
+// Server response: not found
+EXPECT_EQ("find 7", ""); // Test the command sent by the client
+EXPECT_EQ(serverResponse, "not found"); // Test the server's response
+
+
