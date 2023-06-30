@@ -69,6 +69,28 @@ private:
         return clientSocket;
     }
 
+     void handleClientRequests(int clientSocket) {
+        char buffer[1024];
+        std::string clientMessage;
+
+        while (true) {
+            ssize_t bytesRead = recv(clientSocket, buffer, sizeof(buffer) - 1, 0); // Receive client's message
+            if (bytesRead <= 0) {
+                break;
+            }
+
+            buffer[bytesRead] = '\0';
+            clientMessage += buffer;
+
+            if (clientMessage.find('\n') != std::string::npos) {
+                std::string response = processClientCommand(clientMessage); // Process client's command
+                send(clientSocket, response.c_str(), response.length(), 0); // Send response to client
+
+                clientMessage.clear();
+            }
+        }
+    }
+
 }
 
 int main() {
