@@ -5,3 +5,9 @@
 // Server response: <No response needed>
 EXPECT_EQ("insert 5", ""); // Test the command sent by the client
 EXPECT_EQ(serverResponse, ""); // Test the server's response
+
+// Client command: delete 5
+// Server response: <No response needed>
+EXPECT_EQ("delete 5", ""); // Test the command sent by the client
+EXPECT_EQ(serverResponse, ""); // Test the server's response
+
