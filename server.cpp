@@ -184,7 +184,15 @@ private:
         }
     }
 
-}
+
+    BSTNode* findMinNode(BSTNode* node) {
+        while (node->left != nullptr) {
+            node = node->left; // Find the minimum key by traversing the left subtree
+        }
+        return node;
+    }
+
+};
 
 int main() {
     // Create socket
