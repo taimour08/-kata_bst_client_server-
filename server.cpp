@@ -91,6 +91,38 @@ private:
         }
     }
 
+
+      std::string processClientCommand(const std::string& command) {
+        std::istringstream iss(command);
+        std::string operation, value;
+        iss >> operation >> value;
+
+        if (operation == "insert") {
+            int num = std::stoi(value);
+            if (insertNode(root, num)) {
+                return ""; // Success, no error message
+            } else {
+                return "ERROR: " + value + " already exists in BST\n"; // Key already exists in the BST
+            }
+        } else if (operation == "delete") {
+            int num = std::stoi(value);
+            if (deleteNode(root, num)) {
+                return ""; // Success, no error message
+            } else {
+                return "ERROR: " + value + " not found in BST\n"; // Key not found in the BST
+            }
+        } else if (operation == "find") {
+            int num = std::stoi(value);
+            if (findNode(root, num)) {
+                return "found\n"; // Key found in the BST
+            } else {
+                return "not found\n"; // Key not found in the BST
+            }
+        } else {
+            return "ERROR: Invalid command\n"; // Invalid command
+        }
+    }
+
 }
 
 int main() {
