@@ -170,6 +170,20 @@ private:
         }
     }
 
+        bool findNode(BSTNode* node, int key) {
+        if (node == nullptr) {
+            return false; // Key not found
+        }
+
+        if (key < node->key) {
+            return findNode(node->left, key); // Recursively search in the left subtree
+        } else if (key > node->key) {
+            return findNode(node->right, key); // Recursively search in the right subtree
+        } else {
+            return true; // Key found
+        }
+    }
+
 }
 
 int main() {
