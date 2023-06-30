@@ -38,6 +38,28 @@ public:
         std::cout << "Disconnected from server." << std::endl;
     }
 
+    private:
+    int connectToServer(const std::string& serverIP, int port) {
+        int clientSocket = socket(AF_INET, SOCK_STREAM, 0); // Create client socket
+        if (clientSocket == -1) {
+            throw std::runtime_error("Failed to create client socket.");
+        }
+
+        sockaddr_in serverAddress{};
+        serverAddress.sin_family = AF_INET;
+        serverAddress.sin_port = htons(port);
+
+        if (inet_pton(AF_INET, serverIP.c_str(), &(serverAddress.sin_addr)) <= 0) {
+            throw std::runtime_error("Invalid server IP address.");
+        }
+
+        if (connect(clientSocket, reinterpret_cast<sockaddr*>(&serverAddress), sizeof(serverAddress)) < 0) {
+            throw std::runtime_error("Failed to connect to server.");
+        }
+
+        return clientSocket; // Return the client socket
+    }
+
 
 };
 
