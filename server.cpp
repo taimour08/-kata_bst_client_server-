@@ -58,6 +58,17 @@ private:
         return serverSocket;
     }
 
+  int acceptClientConnection(int serverSocket) {
+        sockaddr_in clientAddress{};
+        socklen_t clientAddressLength = sizeof(clientAddress);
+        int clientSocket = accept(serverSocket, reinterpret_cast<sockaddr*>(&clientAddress), &clientAddressLength); // Accept client connection
+        if (clientSocket < 0) {
+            throw std::runtime_error("Failed to accept client connection.");
+        }
+
+        return clientSocket;
+    }
+
 }
 
 int main() {
