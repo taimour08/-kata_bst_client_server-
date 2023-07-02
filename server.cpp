@@ -157,6 +157,38 @@ void insertNode(Node*& root, int value) {
 }
 
 
+// Function to delete a value from the BST
+bool deleteNode(Node*& root, int value) {
+    if (root == nullptr) {
+        return false;
+    }
+
+    if (value < root->data) {
+        return deleteNode(root->left, value);
+    } else if (value > root->data) {
+        return deleteNode(root->right, value);
+    } else {
+        if (root->left == nullptr) {
+            Node* temp = root;
+            root = root->right;
+            delete temp;
+        } else if (root->right == nullptr) {
+            Node* temp = root;
+            root = root->left;
+            delete temp;
+        } else {
+            Node* temp = root->right;
+            while (temp->left != nullptr) {
+                temp = temp->left;
+            }
+            root->data = temp->data;
+            return deleteNode(root->right, temp->data);
+        }
+        return true;
+    }
+}
+
+
 
 int main() {
   // Create socket
