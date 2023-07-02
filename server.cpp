@@ -180,5 +180,58 @@ int main() {
 
     std::cout << "Server is listening on IP: 127.0.0.1, Port: 1234" << std::endl;
 
+     Node* bstRoot = nullptr;
+
+    // Accept connections and handle client requests
+    while (true) {
+        // Accept a client connection
+        int clientSocket = accept(serverSocket, nullptr, nullptr);
+        if (clientSocket < 0) {
+            throw std::runtime_error("Failed to accept client connection.");
+        }
+
+        // Get the client's IP and port number
+        sockaddr_in clientAddress{};
+        socklen_t clientAddressLength = sizeof(clientAddress);
+        getpeername(clientSocket, reinterpret_cast<sockaddr*>(&clientAddress), &clientAddressLength);
+
+        // Print client connection details
+       // std::cout << "Client connected from IP: " << inet_ntop(clientAddress.sin_addr)
+       //           << ", Port: " << ntohs(clientAddress.sin_port) << std::endl;
+
+        // Handle client's commands
+        char buffer[1024];
+        while (true) {
+            // Receive command from the client
+            ssize_t bytesRead = recv(clientSocket, buffer, sizeof(buffer) - 1, 0);
+            if (bytesRead > 0) {
+                buffer[bytesRead] = '\0';
+                std::string command(buffer);
+
+                // Handle the client's command
+               handleCommand(clientSocket, bstRoot, command);
+
+                // TODO: Implement the logic to send the appropriate response back to the client
+
+                // Exit loop if the command is "exit"
+                if (command == "exit") {
+                    break;
+                }
+            } else if (bytesRead == 0) {
+                std::cout << "Client closed the connection" << std::endl;
+                break;
+            } else {
+                throw std::runtime_error("Failed to receive data from client");
+            }
+        }
+
+        // Close the client socket
+        close(clientSocket);
+    }
+
+    // Close the server socket
+    close(serverSocket);
+
+
     return 0;
 }
