@@ -21,45 +21,7 @@ class BSTServer {
 public:
     BSTNode* root;
 
-    BSTServer() : root(nullptr) {}
-
-    void run(int port) {
-        int serverSocket = createServerSocket(port);
-        std::cout << "Server started. Listening on port " << port << "." << std::endl;
-
-        while (true) {
-            int clientSocket = acceptClientConnection(serverSocket);
-            std::cout << "Client connected. Client socket: " << clientSocket << std::endl;
-
-            handleClientRequests(clientSocket);
-
-            close(clientSocket);
-            std::cout << "Client disconnected. Client socket: " << clientSocket << std::endl;
-        }
-    }
-
 private:
-    int createServerSocket(int port) {
-        int serverSocket = socket(AF_INET, SOCK_STREAM, 0);
-        if (serverSocket == -1) {
-            throw std::runtime_error("Failed to create server socket.");
-        }
-
-        sockaddr_in serverAddress{};
-        serverAddress.sin_family = AF_INET;
-        serverAddress.sin_addr.s_addr = INADDR_ANY;
-        serverAddress.sin_port = htons(port);
-
-        if (bind(serverSocket, reinterpret_cast<sockaddr*>(&serverAddress), sizeof(serverAddress)) < 0) {
-            throw std::runtime_error("Failed to bind server socket to port.");
-        }
-
-        if (listen(serverSocket, 3) < 0) {
-            throw std::runtime_error("Failed to listen on server socket.");
-        }
-
-        return serverSocket;
-    }
 
     int acceptClientConnection(int serverSocket) {
         sockaddr_in clientAddress{};
