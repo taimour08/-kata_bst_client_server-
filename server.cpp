@@ -19,7 +19,6 @@ struct Node {
 
 class BSTServer {
 public:
-    BSTNode* root;
 
 private:
 
@@ -87,20 +86,6 @@ private:
         }
     }
 
-    bool insertNode(BSTNode*& node, int key) {
-        if (node == nullptr) {
-            node = new BSTNode(key);
-            return true; // Success, key inserted
-        }
-
-        if (key < node->key) {
-            return insertNode(node->left, key); // Recursively insert in the left subtree
-        } else if (key > node->key) {
-            return insertNode(node->right, key); // Recursively insert in the right subtree
-        } else {
-            return false; // Key already exists in the BST
-        }
-    }
 
     bool deleteNode(BSTNode*& node, int key) {
         if (node == nullptr) {
@@ -154,6 +139,24 @@ private:
         return node;
     }
 };
+
+
+
+// Function to insert a value into the BST
+void insertNode(Node*& root, int value) {
+    if (root == nullptr) {
+        root = new Node(value);
+        return;
+    }
+
+    if (value < root->data) {
+        insertNode(root->left, value);
+    } else if (value > root->data) {
+        insertNode(root->right, value);
+    }
+}
+
+
 
 int main() {
   // Create socket
