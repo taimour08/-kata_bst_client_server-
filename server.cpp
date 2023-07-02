@@ -156,8 +156,18 @@ private:
 };
 
 int main() {
-    BSTServer server;
-    server.run(12345); // Start the server
+  // Create socket
+    int serverSocket = socket(AF_INET, SOCK_STREAM, 0);
+    if (serverSocket < 0) {
+        throw std::runtime_error("Failed to create server socket.");
+    }
+
+    // Server details
+    sockaddr_in serverAddress{};
+    serverAddress.sin_family = AF_INET;
+    serverAddress.sin_addr.s_addr = INADDR_ANY;
+    serverAddress.sin_port = htons(1234); // Replace with the desired port number
+
 
     return 0;
 }
