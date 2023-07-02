@@ -1,13 +1,10 @@
 #include <iostream>
-#include <sstream>
-#include <stdexcept>
-#include <string>
 #include <sys/socket.h>
-#include <arpa/inet.h>
+#include <netinet/in.h>
 #include <unistd.h>
-#include <limits>
-
-using namespace std;
+#include <string>
+#include <stdexcept>
+#include <arpa/inet.h>
 
 // Function to send a command to the server
 void sendCommand(int serverSocket, const std::string& command) {
