@@ -84,10 +84,54 @@ void receiveResponse(int serverSocket) {
     }
 }
 
-
+// Client program entry point
 int main() {
-    BSTClient client;
-    client.run("127.0.0.1", 12345); // Connect to the server at IP address "127.0.0.1" and port 12345
+    // Create socket
+    int serverSocket = socket(AF_INET, SOCK_STREAM, 0);
+    if (serverSocket < 0) {
+        throw std::runtime_error("Failed to create server socket.");
+    }
 
+    // Server details
+    sockaddr_in serverAddress{};
+    serverAddress.sin_family = AF_INET;
+    serverAddress.sin_port = htons(1234); // Replace with the server's port number
+
+    // Convert IP address from text to binary form
+    if (inet_pton(AF_INET, "127.0.0.1", &(serverAddress.sin_addr)) <= 0) {
+        throw std::runtime_error("Invalid address or address not supported.");
+    }
+
+    // Connect to the server
+    if (connect(serverSocket, (struct sockaddr*)&serverAddress, sizeof(serverAddress)) == -1) {
+        throw std::runtime_error("Failed to connect to server.");
+    }
+
+    // Send commands to the server
+    std::string command;
+    while (true) {
+        try {
+            std::cout << "Enter command (insert, find, delete, or exit): ";
+            std::getline(std::cin, command);
+
+            // Send the command to the server
+            sendCommand(serverSocket, command);
+
+            // Receive and print the server's response
+            receiveResponse(serverSocket);
+
+            // Handle termination condition
+            if (command == "exit") {
+                std::cout << "Exiting the client program" << std::endl;
+                break;
+            }
+        } catch (const std::exception& e) {
+            std::cerr << "Error: " << e.what() << std::endl;
+            close(serverSocket);
+            exit(1);
+        }
+    }
+
+    close(serverSocket);
     return 0;
 }
