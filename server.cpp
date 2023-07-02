@@ -87,57 +87,6 @@ private:
     }
 
 
-    bool deleteNode(BSTNode*& node, int key) {
-        if (node == nullptr) {
-            return false; // Key not found
-        }
-
-        if (key < node->key) {
-            return deleteNode(node->left, key); // Recursively delete in the left subtree
-        } else if (key > node->key) {
-            return deleteNode(node->right, key); // Recursively delete in the right subtree
-        } else {
-            if (node->left == nullptr && node->right == nullptr) {
-                delete node; // Node has no children
-                node = nullptr;
-            } else if (node->left == nullptr) {
-                BSTNode* temp = node;
-                node = node->right; // Node has only right child
-                delete temp;
-            } else if (node->right == nullptr) {
-                BSTNode* temp = node;
-                node = node->left; // Node has only left child
-                delete temp;
-            } else {
-                BSTNode* minNode = findMinNode(node->right);
-                node->key = minNode->key; // Replace the key with the minimum key in the right subtree
-                deleteNode(node->right, minNode->key); // Recursively delete the minimum key from the right subtree
-            }
-
-            return true; // Success, key deleted
-        }
-    }
-
-    bool findNode(BSTNode* node, int key) {
-        if (node == nullptr) {
-            return false; // Key not found
-        }
-
-        if (key < node->key) {
-            return findNode(node->left, key); // Recursively search in the left subtree
-        } else if (key > node->key) {
-            return findNode(node->right, key); // Recursively search in the right subtree
-        } else {
-            return true; // Key found
-        }
-    }
-
-    BSTNode* findMinNode(BSTNode* node) {
-        while (node->left != nullptr) {
-            node = node->left; // Find the minimum key by traversing the left subtree
-        }
-        return node;
-    }
 };
 
 
