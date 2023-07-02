@@ -33,58 +33,6 @@ private:
         return clientSocket;
     }
 
-    void handleClientRequests(int clientSocket) {
-        char buffer[1024];
-        std::string clientMessage;
-
-        while (true) {
-            ssize_t bytesRead = recv(clientSocket, buffer, sizeof(buffer) - 1, 0);
-            if (bytesRead <= 0) {
-                break;
-            }
-
-            buffer[bytesRead] = '\0';
-            clientMessage += buffer;
-
-            if (clientMessage.find('\n') != std::string::npos) {
-                std::string response = processClientCommand(clientMessage);
-                send(clientSocket, response.c_str(), response.length(), 0);
-
-                clientMessage.clear();
-            }
-        }
-    }
-
-    std::string processClientCommand(const std::string& command) {
-        std::istringstream iss(command);
-        std::string operation, value;
-        iss >> operation >> value;
-
-        if (operation == "insert") {
-            int num = std::stoi(value);
-            if (insertNode(root, num)) {
-                return ""; // Success, no error message
-            } else {
-                return "ERROR: " + value + " already exists in BST\n"; // Key already exists in the BST
-            }
-        } else if (operation == "delete") {
-            int num = std::stoi(value);
-            if (deleteNode(root, num)) {
-                return ""; // Success, no error message
-            } else {
-                return "ERROR: " + value + " not found in BST\n"; // Key not found in the BST
-            }
-        } else if (operation == "find") {
-            int num = std::stoi(value);
-            if (findNode(root, num)) {
-                return "found\n"; // Key found in the BST
-            } else {
-                return "not found\n"; // Key not found in the BST
-            }
-        } else {
-            return "ERROR: Invalid command\n"; // Invalid command
-        }
-    }
 
 
 };
