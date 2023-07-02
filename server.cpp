@@ -154,6 +154,46 @@ bool findNode(const Node* root, int value) {
 }
 
 
+// Function to handle the client's commands
+void handleCommand(int clientSocket, Node*& bstRoot, const std::string& command) {
+    std::string operation;
+    int value;
+
+    std::cout << "Received command from client: " << command << std::endl;
+
+    std::istringstream iss(command);
+    iss >> operation >> value;
+
+    std::string response;
+
+    if (operation == "insert") {
+        if (findNode(bstRoot, value)) {
+            response = "Error: Value already exists in the BST.";
+        } else {
+            insertNode(bstRoot, value);
+            response = "Insertion successful.";
+        }
+    } else if (operation == "delete") {
+        if (deleteNode(bstRoot, value)) {
+            response = "Deletion successful.";
+        } else {
+            response = "Error: Value not found in the BST.";
+        }
+    } else if (operation == "find") {
+        if (findNode(bstRoot, value)) {
+            response = "Value found in the BST.";
+        } else {
+            response = "Value not found in the BST.";
+        }
+    } else {
+        response = "Error: Invalid command.";
+    }
+
+    send(clientSocket, response.c_str(), response.size(), 0);
+}
+
+
+
 int main() {
   // Create socket
     int serverSocket = socket(AF_INET, SOCK_STREAM, 0);
