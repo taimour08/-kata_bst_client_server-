@@ -168,6 +168,17 @@ int main() {
     serverAddress.sin_addr.s_addr = INADDR_ANY;
     serverAddress.sin_port = htons(1234); // Replace with the desired port number
 
+      // Bind the socket to the specified IP address and port number
+    if (bind(serverSocket, reinterpret_cast<sockaddr*>(&serverAddress), sizeof(serverAddress)) < 0) {
+        throw std::runtime_error("Failed to bind server socket to port.");
+    }
+
+    // Listen for incoming connections
+    if (listen(serverSocket, 3) < 0) {
+        throw std::runtime_error("Failed to listen on server socket.");
+    }
+
+    std::cout << "Server is listening on IP: 127.0.0.1, Port: 1234" << std::endl;
 
     return 0;
 }
