@@ -1,12 +1,10 @@
 #include <iostream>
-#include <sstream>
-#include <stdexcept>
-#include <string>
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <unistd.h>
-
-using namespace std;
+#include <string>
+#include <stdexcept>
+#include <sstream>
 
 // Node structure for Binary Search Tree
 struct Node {
@@ -16,28 +14,6 @@ struct Node {
 
     explicit Node(int value) : data(value), left(nullptr), right(nullptr) {}
 };
-
-class BSTServer {
-public:
-
-private:
-
-    int acceptClientConnection(int serverSocket) {
-        sockaddr_in clientAddress{};
-        socklen_t clientAddressLength = sizeof(clientAddress);
-        int clientSocket = accept(serverSocket, reinterpret_cast<sockaddr*>(&clientAddress), &clientAddressLength);
-        if (clientSocket < 0) {
-            throw std::runtime_error("Failed to accept client connection.");
-        }
-
-        return clientSocket;
-    }
-
-
-
-};
-
-
 
 // Function to insert a value into the BST
 void insertNode(Node*& root, int value) {
@@ -52,7 +28,6 @@ void insertNode(Node*& root, int value) {
         insertNode(root->right, value);
     }
 }
-
 
 // Function to delete a value from the BST
 bool deleteNode(Node*& root, int value) {
@@ -85,7 +60,6 @@ bool deleteNode(Node*& root, int value) {
     }
 }
 
-
 // Function to find a value in the BST
 bool findNode(const Node* root, int value) {
     if (root == nullptr) {
@@ -100,7 +74,6 @@ bool findNode(const Node* root, int value) {
         return true;
     }
 }
-
 
 // Function to handle the client's commands
 void handleCommand(int clientSocket, Node*& bstRoot, const std::string& command) {
@@ -140,10 +113,9 @@ void handleCommand(int clientSocket, Node*& bstRoot, const std::string& command)
     send(clientSocket, response.c_str(), response.size(), 0);
 }
 
-
-
+// Server program entry point
 int main() {
-  // Create socket
+    // Create socket
     int serverSocket = socket(AF_INET, SOCK_STREAM, 0);
     if (serverSocket < 0) {
         throw std::runtime_error("Failed to create server socket.");
@@ -155,7 +127,7 @@ int main() {
     serverAddress.sin_addr.s_addr = INADDR_ANY;
     serverAddress.sin_port = htons(1234); // Replace with the desired port number
 
-      // Bind the socket to the specified IP address and port number
+    // Bind the socket to the specified IP address and port number
     if (bind(serverSocket, reinterpret_cast<sockaddr*>(&serverAddress), sizeof(serverAddress)) < 0) {
         throw std::runtime_error("Failed to bind server socket to port.");
     }
@@ -167,7 +139,7 @@ int main() {
 
     std::cout << "Server is listening on IP: 127.0.0.1, Port: 1234" << std::endl;
 
-     Node* bstRoot = nullptr;
+    Node* bstRoot = nullptr;
 
     // Accept connections and handle client requests
     while (true) {
@@ -218,7 +190,6 @@ int main() {
 
     // Close the server socket
     close(serverSocket);
-
 
     return 0;
 }
