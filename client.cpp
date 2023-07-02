@@ -68,6 +68,22 @@ void sendCommand(int serverSocket, const std::string& command) {
     send(serverSocket, command.c_str(), command.size(), 0);
 }
 
+// Function to receive and print the server's response
+void receiveResponse(int serverSocket) {
+    char buffer[1024];
+    ssize_t bytesRead = recv(serverSocket, buffer, sizeof(buffer) - 1, 0);
+    if (bytesRead > 0) {
+        buffer[bytesRead] = '\0';
+        std::cout << "Server response: " << buffer << std::endl;
+    } else if (bytesRead == 0) {
+        std::cout << "Server closed the connection" << std::endl;
+        close(serverSocket);
+        exit(0);
+    } else {
+        throw std::runtime_error("Failed to receive data from server");
+    }
+}
+
 
 int main() {
     BSTClient client;
