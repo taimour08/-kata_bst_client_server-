@@ -63,6 +63,12 @@ private:
     }
 };
 
+// Function to send a command to the server
+void sendCommand(int serverSocket, const std::string& command) {
+    send(serverSocket, command.c_str(), command.size(), 0);
+}
+
+
 int main() {
     BSTClient client;
     client.run("127.0.0.1", 12345); // Connect to the server at IP address "127.0.0.1" and port 12345
