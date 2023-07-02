@@ -189,6 +189,21 @@ bool deleteNode(Node*& root, int value) {
 }
 
 
+// Function to find a value in the BST
+bool findNode(const Node* root, int value) {
+    if (root == nullptr) {
+        return false;
+    }
+
+    if (value < root->data) {
+        return findNode(root->left, value);
+    } else if (value > root->data) {
+        return findNode(root->right, value);
+    } else {
+        return true;
+    }
+}
+
 
 int main() {
   // Create socket
