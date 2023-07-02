@@ -3,21 +3,26 @@
 #include <stdexcept>
 #include <string>
 #include <sys/socket.h>
-#include <arpa/inet.h>
+#include <netinet/in.h>
 #include <unistd.h>
 
-class BSTNode {
-public:
-    int key;
-    BSTNode* left;
-    BSTNode* right;
+using namespace std;
 
-    BSTNode(int key) : key(key), left(nullptr), right(nullptr) {}
+// Node structure for Binary Search Tree
+struct Node {
+    int data;
+    Node* left;
+    Node* right;
+
+    explicit Node(int value) : data(value), left(nullptr), right(nullptr) {}
 };
-
 
 class BSTServer {
 public:
+    BSTNode* root;
+
+    BSTServer() : root(nullptr) {}
+
     void run(int port) {
         int serverSocket = createServerSocket(port);
         std::cout << "Server started. Listening on port " << port << "." << std::endl;
@@ -34,10 +39,8 @@ public:
     }
 
 private:
-    BSTNode* root; // Binary search tree root
-
     int createServerSocket(int port) {
-        int serverSocket = socket(AF_INET, SOCK_STREAM, 0); // Create server socket
+        int serverSocket = socket(AF_INET, SOCK_STREAM, 0);
         if (serverSocket == -1) {
             throw std::runtime_error("Failed to create server socket.");
         }
@@ -58,10 +61,10 @@ private:
         return serverSocket;
     }
 
-  int acceptClientConnection(int serverSocket) {
+    int acceptClientConnection(int serverSocket) {
         sockaddr_in clientAddress{};
         socklen_t clientAddressLength = sizeof(clientAddress);
-        int clientSocket = accept(serverSocket, reinterpret_cast<sockaddr*>(&clientAddress), &clientAddressLength); // Accept client connection
+        int clientSocket = accept(serverSocket, reinterpret_cast<sockaddr*>(&clientAddress), &clientAddressLength);
         if (clientSocket < 0) {
             throw std::runtime_error("Failed to accept client connection.");
         }
@@ -69,12 +72,12 @@ private:
         return clientSocket;
     }
 
-     void handleClientRequests(int clientSocket) {
+    void handleClientRequests(int clientSocket) {
         char buffer[1024];
         std::string clientMessage;
 
         while (true) {
-            ssize_t bytesRead = recv(clientSocket, buffer, sizeof(buffer) - 1, 0); // Receive client's message
+            ssize_t bytesRead = recv(clientSocket, buffer, sizeof(buffer) - 1, 0);
             if (bytesRead <= 0) {
                 break;
             }
@@ -83,16 +86,15 @@ private:
             clientMessage += buffer;
 
             if (clientMessage.find('\n') != std::string::npos) {
-                std::string response = processClientCommand(clientMessage); // Process client's command
-                send(clientSocket, response.c_str(), response.length(), 0); // Send response to client
+                std::string response = processClientCommand(clientMessage);
+                send(clientSocket, response.c_str(), response.length(), 0);
 
                 clientMessage.clear();
             }
         }
     }
 
-
-      std::string processClientCommand(const std::string& command) {
+    std::string processClientCommand(const std::string& command) {
         std::istringstream iss(command);
         std::string operation, value;
         iss >> operation >> value;
@@ -123,10 +125,9 @@ private:
         }
     }
 
-
     bool insertNode(BSTNode*& node, int key) {
         if (node == nullptr) {
-            node = new BSTNode(key); // Create new node for the key
+            node = new BSTNode(key);
             return true; // Success, key inserted
         }
 
@@ -170,7 +171,7 @@ private:
         }
     }
 
-        bool findNode(BSTNode* node, int key) {
+    bool findNode(BSTNode* node, int key) {
         if (node == nullptr) {
             return false; // Key not found
         }
@@ -184,14 +185,12 @@ private:
         }
     }
 
-
     BSTNode* findMinNode(BSTNode* node) {
         while (node->left != nullptr) {
             node = node->left; // Find the minimum key by traversing the left subtree
         }
         return node;
     }
-
 };
 
 int main() {

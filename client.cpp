@@ -5,7 +5,9 @@
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #include <unistd.h>
+#include <limits>
 
+using namespace std;
 
 class BSTClient {
 public:
@@ -16,7 +18,7 @@ public:
         while (true) {
             std::string command;
             std::cout << "Enter command: ";
-            std::getline(std::cin, command);
+            getline(cin, command);
 
             if (command == "exit") {
                 break;
@@ -38,7 +40,7 @@ public:
         std::cout << "Disconnected from server." << std::endl;
     }
 
-    private:
+private:
     int connectToServer(const std::string& serverIP, int port) {
         int clientSocket = socket(AF_INET, SOCK_STREAM, 0); // Create client socket
         if (clientSocket == -1) {
@@ -59,8 +61,6 @@ public:
 
         return clientSocket; // Return the client socket
     }
-
-
 };
 
 int main() {
@@ -69,4 +69,3 @@ int main() {
 
     return 0;
 }
-
