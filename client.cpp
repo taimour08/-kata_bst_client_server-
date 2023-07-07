@@ -8,7 +8,7 @@
 
 // Function to send a command to the server
 void sendCommand(int serverSocket, const std::string& command) {
-    send(serverSocket, command.c_str(), command.size(), 0);
+    send(serverSocket, command.c_str(), command.size(), 0); // 2
 }
 
 // Function to receive and print the server's response
@@ -29,7 +29,7 @@ void receiveResponse(int serverSocket) {
 
 // Client program entry point
 int main() {
-    // Create socket
+    // Create socket - Communication channel.
     int serverSocket = socket(AF_INET, SOCK_STREAM, 0);
     if (serverSocket < 0) {
         throw std::runtime_error("Failed to create server socket.");
@@ -40,7 +40,7 @@ int main() {
     serverAddress.sin_family = AF_INET;
     serverAddress.sin_port = htons(1234); // Replace with the server's port number
 
-    // Convert IP address from text to binary form
+    // Convert IP address from text to binary form // 2
     if (inet_pton(AF_INET, "127.0.0.1", &(serverAddress.sin_addr)) <= 0) {
         throw std::runtime_error("Invalid address or address not supported.");
     }

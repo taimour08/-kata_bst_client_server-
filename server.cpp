@@ -12,7 +12,7 @@ struct Node {
     Node* left;
     Node* right;
 
-    explicit Node(int value) : data(value), left(nullptr), right(nullptr) {}
+    explicit Node(int value) : data(value), left(nullptr), right(nullptr) {} // Constructor 
 };
 
 // Function to insert a value into the BST
@@ -83,19 +83,19 @@ void handleCommand(int clientSocket, Node*& bstRoot, const std::string& command)
     std::cout << "Received command from client: " << command << std::endl;
 
     std::istringstream iss(command);
-    iss >> operation >> value;
+    iss >> operation >> value;  // Put insert & 5 in the operation and value 
 
     std::string response;
 
     if (operation == "insert") {
-        if (findNode(bstRoot, value)) {
+        if (findNode(bstRoot, value)) { // The functions return a boolean.
             response = "Error: Value already exists in the BST.";
         } else {
             insertNode(bstRoot, value);
             response = "Insertion successful.";
         }
     } else if (operation == "delete") {
-        if (deleteNode(bstRoot, value)) {
+        if (deleteNode(bstRoot, value)) {   
             response = "Deletion successful.";
         } else {
             response = "Error: Value not found in the BST.";
@@ -122,10 +122,12 @@ int main() {
     }
 
     // Server details
+    // Specify the server's address information for a network socket. (So others can connect)
     sockaddr_in serverAddress{};
     serverAddress.sin_family = AF_INET;
     serverAddress.sin_addr.s_addr = INADDR_ANY;
     serverAddress.sin_port = htons(1234); // Replace with the desired port number
+    
 
     // Bind the socket to the specified IP address and port number
     if (bind(serverSocket, reinterpret_cast<sockaddr*>(&serverAddress), sizeof(serverAddress)) < 0) {
@@ -149,21 +151,18 @@ int main() {
             throw std::runtime_error("Failed to accept client connection.");
         }
 
-        // Get the client's IP and port number
+        // Get the client's IP and port number. Port number for the services already running.
         sockaddr_in clientAddress{};
         socklen_t clientAddressLength = sizeof(clientAddress);
         getpeername(clientSocket, reinterpret_cast<sockaddr*>(&clientAddress), &clientAddressLength);
 
-        // Print client connection details
-       // std::cout << "Client connected from IP: " << inet_ntop(clientAddress.sin_addr)
-       //           << ", Port: " << ntohs(clientAddress.sin_port) << std::endl;
 
         // Handle client's commands
         char buffer[1024];
         while (true) {
             // Receive command from the client
             ssize_t bytesRead = recv(clientSocket, buffer, sizeof(buffer) - 1, 0);
-            if (bytesRead > 0) {
+            if (bytesRead > 0) {   
                 buffer[bytesRead] = '\0';
                 std::string command(buffer);
 
