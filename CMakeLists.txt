@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.1)
-project(FizzBuzz)
+project(kata_bst_client_server)
 
 set(CMAKE_CXX_STANDARD 20)
 
